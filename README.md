@@ -58,6 +58,34 @@ npm run start
 
 Set `DATABASE_URL` in `.env` (e.g. `file:./dev.db` for SQLite in the `prisma` folder). For production hosting, use a writable path for the SQLite file and run `npx prisma db push` before starting.
 
+### 1.6. Where is my data stored?
+
+- **In this app, imported data is stored in a database (SQLite), not in localStorage.**
+- The SQLite file lives at `prisma/dev.db` (when `DATABASE_URL="file:./dev.db"`). The import API parses your JSON and writes rows into this file; the feed and stats read from the same database.
+
+### 1.7. Deploying to Netlify (or other serverless hosts)
+
+On **Netlify**, **Vercel**, etc., the server has **no persistent disk**. A local SQLite file would be lost between requests or deploys, so **imports would not persist** if you keep using `file:./dev.db`.
+
+**Option A – Use a hosted database (recommended)**  
+Use a free SQLite-compatible or SQL database so data persists:
+
+1. **Turso** (free tier, SQLite-compatible)
+   - Sign up at [turso.tech](https://turso.tech), create a database, and get the connection URL.
+   - Install: `npm install @libsql/client`
+   - In Prisma, you can use the Turso URL as your datasource (e.g. set `DATABASE_URL` to the Turso libsql URL and use the libsql provider/adapter if required by your Prisma version).
+   - In Netlify: add `DATABASE_URL` in **Site settings → Environment variables** and run `npx prisma db push` (or migrations) in the build step.
+
+2. **Neon / Supabase / PlanetScale** (Postgres or MySQL)  
+   - Create a free database and set `DATABASE_URL` to the connection string.
+   - Change `provider` in `prisma/schema.prisma` to `postgresql` or `mysql` and run `prisma migrate` or `prisma db push`.
+   - Add `DATABASE_URL` in Netlify (and run migrations in the build command if needed).
+
+After that, **import works as usual**: users hit your deployed app, upload JSON on the Import page, and data is saved in the hosted DB and shown in the feed.
+
+**Option B – Client-side only (no server DB)**  
+You could later change the app to store imported data only in the browser (e.g. localStorage or IndexedDB). That would work on static Netlify with no backend DB, but data would stay on that device/browser and not sync across devices.
+
 ---
 
 ## 2. Where to find Instagram export JSON files
