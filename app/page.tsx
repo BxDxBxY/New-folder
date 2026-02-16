@@ -148,21 +148,21 @@ export default function FeedPage() {
   return (
     <div className="h-screen flex flex-col">
       {/* Simplified sticky top bar */}
-      <div className="sticky top-0 z-20 bg-slate-950/95 backdrop-blur-sm border-b border-slate-800 px-4 py-3">
-        <div className="max-w-4xl mx-auto flex items-center justify-between gap-4 flex-wrap">
-          <div className="flex items-center gap-3 flex-1 min-w-0">
+      <div className="sticky top-0 z-20 bg-slate-950/95 backdrop-blur-sm border-b border-slate-800 px-3 sm:px-4 py-2 sm:py-3">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 flex-1 min-w-0">
             <input
               type="text"
               placeholder="Search..."
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              className="flex-1 min-w-[120px] rounded-xl bg-slate-900/60 border border-slate-700 px-4 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              className="flex-1 min-w-0 rounded-xl bg-slate-900/60 border border-slate-700 px-3 sm:px-4 py-2 text-sm text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-sky-500"
             />
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               {(["all", "saved", "liked"] as const).map((t) => (
                 <button
                   key={t}
-                  className={`px-3 py-1.5 text-xs rounded-lg border transition-colors ${
+                  className={`px-2 sm:px-3 py-1.5 text-xs rounded-lg border transition-colors flex-1 sm:flex-none ${
                     filter === t
                       ? "bg-slate-50 text-slate-950 border-slate-200"
                       : "border-slate-700 text-slate-300 bg-slate-900/40 hover:bg-slate-800"
@@ -173,35 +173,37 @@ export default function FeedPage() {
                 </button>
               ))}
             </div>
-            <select
-              value={contentType}
-              onChange={(e) => setContentType(e.target.value as ContentTypeFilter)}
-              className="rounded-xl bg-slate-900/60 border border-slate-700 px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
-            >
-              <option value="all">All</option>
-              <option value="video">Videos</option>
-              <option value="post">Posts</option>
-            </select>
-            <select
-              value={sort}
-              onChange={(e) => setSort(e.target.value as Sort)}
-              className="rounded-xl bg-slate-900/60 border border-slate-700 px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
-            >
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
-            </select>
+            <div className="flex gap-2">
+              <select
+                value={contentType}
+                onChange={(e) => setContentType(e.target.value as ContentTypeFilter)}
+                className="flex-1 sm:flex-none rounded-xl bg-slate-900/60 border border-slate-700 px-2 sm:px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              >
+                <option value="all">All</option>
+                <option value="video">Videos</option>
+                <option value="post">Posts</option>
+              </select>
+              <select
+                value={sort}
+                onChange={(e) => setSort(e.target.value as Sort)}
+                className="flex-1 sm:flex-none rounded-xl bg-slate-900/60 border border-slate-700 px-2 sm:px-3 py-1.5 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-500"
+              >
+                <option value="newest">Newest</option>
+                <option value="oldest">Oldest</option>
+              </select>
+            </div>
           </div>
           <a
             href="https://www.instagram.com"
             target="_blank"
             rel="noreferrer"
-            className="shrink-0 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-4 py-2 text-sm font-medium text-white hover:from-purple-600 hover:to-pink-600 transition-colors"
+            className="shrink-0 inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-3 sm:px-4 py-2 text-sm font-medium text-white hover:from-purple-600 hover:to-pink-600 transition-colors w-full sm:w-auto"
           >
             Instagram
           </a>
         </div>
         {initialLoaded && (
-          <div className="text-xs text-slate-400 mt-2 text-center">
+          <div className="text-xs text-slate-400 mt-2 text-center px-2">
             {total} items • {items.length} loaded
           </div>
         )}
@@ -210,7 +212,9 @@ export default function FeedPage() {
       {/* Reels-like feed with smooth scrolling */}
       <div
         ref={scrollContainerRef}
-        className="flex-1 overflow-y-auto snap-y snap-mandatory scroll-smooth overscroll-contain"
+        className={`flex-1 snap-y snap-mandatory scroll-smooth overscroll-contain ${
+          items.length > 0 ? "overflow-y-auto" : "overflow-hidden"
+        }`}
         style={{ scrollBehavior: "smooth" }}
       >
         <div className="max-w-4xl mx-auto">
@@ -221,7 +225,7 @@ export default function FeedPage() {
                 className="snap-start min-h-screen flex flex-col border-b border-slate-800 bg-slate-950"
               >
                 <div className="flex-1 flex flex-col">
-                  <div className="p-4 pb-2 flex items-center justify-between gap-2">
+                  <div className="p-3 sm:p-4 pb-2 flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2 flex-wrap">
                       {item.isLiked && (
                         <span className="px-2 py-0.5 text-[10px] rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
@@ -241,19 +245,19 @@ export default function FeedPage() {
                       href={item.igUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="text-xs text-sky-400 hover:text-sky-300"
+                      className="text-xs text-sky-400 hover:text-sky-300 whitespace-nowrap"
                     >
                       Open →
                     </a>
                   </div>
 
-                  <div className="px-4 pb-2">
+                  <div className="px-3 sm:px-4 pb-2">
                     <p className="text-sm font-semibold text-slate-100">
                       {item.username ?? "Unknown user"}
                     </p>
                   </div>
 
-                  <div className="flex-1 flex items-center justify-center px-4 pb-4 min-h-0">
+                  <div className="flex-1 flex items-center justify-center px-3 sm:px-4 pb-4 min-h-0">
                     <InstagramEmbed
                       igUrl={item.igUrl}
                       contentType={item.contentType}
@@ -265,8 +269,8 @@ export default function FeedPage() {
             ))}
 
             {!items.length && !loading && (
-              <div className="min-h-screen flex items-center justify-center">
-                <div className="text-sm text-slate-400 border border-dashed border-slate-700 rounded-2xl p-6 text-center max-w-md">
+              <div className="min-h-screen flex items-center justify-center px-4">
+                <div className="text-sm text-slate-400 border border-dashed border-slate-700 rounded-2xl p-6 text-center max-w-md w-full">
                   No posts yet. Upload your Instagram export JSON on{" "}
                   <a href="/import" className="text-sky-300 hover:text-sky-200">
                     /import
