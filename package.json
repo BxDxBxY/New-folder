@@ -1,0 +1,32 @@
+{
+  "name": "insta-liked-saved-feed",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
+    "dev:import": "ts-node --project tsconfig.json scripts/dev-import.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.14.0",
+    "next": "14.1.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/node": "^20.11.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "prisma": "^5.14.0",
+    "tailwindcss": "^4.1.18",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.0"
+  }
+}

@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model PostItem {
+  id          String   @id @default(cuid())
+  platform    String   @default("instagram")
+  igUrl       String   @unique
+  isLiked     Boolean  @default(false)
+  isSaved     Boolean  @default(false)
+  username    String?
+  caption     String?
+  timestamp   DateTime?
+  contentType String   @default("unknown") // "video" | "post" | "unknown"
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ImportBatch {
+  id         String   @id @default(cuid())
+  source     String
+  importedAt DateTime @default(now())
+
+  // SQLite-friendly: store JSON as text
+  files      String   // JSON.stringify([...]) or JSON.stringify({..})
+  status     String
+  stats      String
+  errorLog   String
+}
+
